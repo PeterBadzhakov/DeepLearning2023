@@ -2,3 +2,4 @@
 Coursework for the Deep Learning course in my Sofia University MSc course.
 
 FN 81818. Dimitar Tatarski.
+FN 82103. Todor Kyurkchiev
