@@ -1,0 +1,368 @@
+Genre classification based on book
+covers with ConvNeXt
+Introduction
+This section discusses our approach to classifying
+book genres using the ConvNeXt model, a cutting-
+edge convolutional neural network (CNN). We lever-
+age visual features from book covers and pre-trained
+weights from ImageNet for this purpose.
+Dataset
+We used the Uchida Lab’s Book Dataset for Task
+1, which contains approximately 50,000 book cover
+images across 30 genres. The images were equally
+split into training and test sets and resized to 224x224
+pixels for uniformity.
+Model Architecture
+The ConvNeXt model, developed by Facebook AI
+Research, served as the base of this architecture. The
+model mixes the best aspects of Convolutional Net-
+works and Transformers and performs well on image
+tasks. It was initially frozen with ImageNet pre-
+trained weights, and we introduced custom layers to
+fine-tune it to our task.
+Shortened Running Article Title
+Figure 1: Accuracy
+Training Process
+Our model underwent two stages of training - initial
+training and fine-tuning. In the initial stage, only
+the custom layers were trained with the base model
+layers remaining unchanged. If the validation loss
+didn’t improve over three epochs, early stopping
+was introduced to avoid overfitting. The last three
+blocks of the base model were then unfrozen for
+fine-tuning, with a reduced learning rate to preserve
+useful features learned from ImageNet.
+Results
+Our ConvNeXt-based classifier was tested on unseen
+data, achieving a test accuracy of 29.91% and a test
+loss of 2.5330. However, improvements can still be
+made.
+Analysis
+Our results indicate the model learned useful pat-
+terns from the training data, but the complexity of
+predicting a book’s genre based on its cover is still
+a challenge. Factors such as varying cover designs
+within a single genre add to this complexity. Fine-
+tuning the last three blocks of the model, however,
+has shown to be beneficial for performance.
+Future Work
+Future enhancements could come from adjusting the
+model’s architecture, introducing data augmentation
+techniques, or expanding the training data. As books
+carry both textual and visual information, incorpo-
+rating text-based features could boost the model’s
+performance.
+Conclusion
+The success of this approach demonstrates the po-
+tential of the ConvNeXt architecture for book genre
+classification tasks. This endeavor forms part of a
+larger mission to improve content discoverability and
+further establish the usefulness of deep learning and
+transfer learning in extracting visual cues for seman-
+tic understanding.
+Genre classification based on book
+covers with ResNet
+Introduction
+This section focuses on another approach to classi-
+fying book genres, this time employing the ResNet
+model, a well-known and robust convolutional neural
+network. The objective remains the same: leveraging
+the visual cues on book covers to categorize them
+into genres.
+Dataset
+Our dataset comprises 32,581 book cover images,
+neatly distributed across 33 categories with roughly
+1,000 images each. These images provide a diverse
+visual representation of the book genres we aim to
+classify.
+Training Workflow
+We begin by dividing the images into training and
+testing sets, maintaining a 7:3 ratio. This gives us
+22,806 images for training and 9,775 images for test-
+ing. Each image in the dataset undergoes transfor-
+mation, being resized to a 120x120 pixel square. For
+validation purposes, we reserve 30% of the training
+data. Nine images will be presented in a batch to pro-
+vide a comprehensive view of the training process.
+Model Architecture
+The heart of our architecture is the ResNet-50 model.
+ResNet’s core innovation is the introduction of "resid-
+ual" or "skip" connections, which help the network
+learn the residual mapping rather than the direct
+underlying mapping. In simpler terms, instead of
+learning the direct connection from input to output,
+ResNet learns the difference (or "residual") between
+the input and output, making the learning process
+more effective and efficient.
+Learning Rate
+A crucial part of the training process is determining
+an optimal learning rate, which is set at 0.01 based
+on our analysis. We use a learning rate finder to
+plot the loss function against various learning rates.
+This visualization guides us towards a learning rate
+2 Journal of Biological Sampling (2024) 12:533-684
+Shortened Running Article Title
+Figure 2: Suggested learning rate
+that enables faster convergence and improved model
+performance during training.
+Results
+Upon testing our ResNet-based classifier on unseen
+data, we achieved an accuracy rate of 30%. While this
+is a promising result, we are always looking for ways
+to improve and refine our model’s performance.
+Analysis
+Our results indicate that the ResNet model is capable
+of extracting useful patterns from our dataset, despite
+the inherent complexity of book cover designs. The
+residual learning strategy, which forms the core of
+ResNet, seems to be an effective method for this task.
+Future Work
+Given these promising results, we see an opportunity
+to fine-tune the model further. We could experi-
+ment with various techniques such as adjusting the
+model’s parameters, implementing additional image
+transformations, or introducing more data augmen-
+tation techniques. Overall, the application of the
+ResNet model offers another fruitful direction for the
+task of book genre classification from cover images.
+Fiction detection from summary
+Introduction
+Initially the task at hand was to determine a book’s
+genre based on book features (for example cover
+description, blurb, other text on cover). This proved
+harder than expected for a number of reasons:
+1. Finding a suitable dataset is hard. Very few
+datasets include the features required to build a
+suitable model.
+2. Genre is not an objective measure and most on-
+line APIs and services rarely include genre la-
+bels. Furthermore - when they happen to include
+such labels - they differ between separate service
+providers.
+3. Extracting text from cover images introduces
+significant information loss and noise. This is
+due to the fact that most books from online cover
+datasets and APIs often include irrelevant text
+for the task at hand.
+We have chosen to simplify the problem by reduc-
+ing the number of classes to two.
+The simplified problem is classifying a book as
+fiction or non-fiction, based on book summary. The
+CMU Book Summary dataset has been used for train-
+ing and validation. The dataset has been prepro-
+cessed - this includes label combination, class balanc-
+ing and summary reduction. The model used is a
+sequential neural network, featuring a bidirectional
+LSTM layer for text processing. The trained model
+displays a good ability to guess whether a book is
+fiction or non-fiction, based on book summary.
+Finding suitable data
+To obtain suitable data, a number of methodologies
+were employed. They include, but are not limited to:
+1. Web scraping - this has proved futile as most
+book information providers require some affilia-
+tion with an institution. Our attempts to acquire
+a higher quota on Google Book API were un-
+successful. We abandoned this approach as we
+had to piece together information from multiple
+APIs and datasets.
+2. We considered classifying books by their Dewey
+Decimal Number. This is a standart classification
+of books, but it differs from the original task,
+because it is only loosely related to book genre.
+DDC mostly focuses on book origin and subject
+matter.
+3. Using description from back cover (book blurb) -
+this approach proved impossible as back covers
+are rarely uploaded and often in bad quality.
+Finally - we decided on using the CMU Book Sum-
+mary Dataset. It features around 16,000 books. Each
+book has a summary (around 500 words on average)
+and one or multiple labels, related to book genre.
+Creating a dataset - attempt 1
+The CMU dataset (link in references below) is com-
+prised of around 16000 rows each containing book
+summary (which is around 500 words but varies),
+and a JSON object containing book labels (genres).
+Journal of Biological Sampling (2024) 12:533-684 3
+Shortened Running Article Title
+One book can have more than 1 class. There are a
+total of 227 distinct labels, 200 of which appear less
+than 100 times and are too few to be of interest. The
+label distribution can be accesed through the follow-
+ing link. The python script that summarizes dataset
+label distribution can be found at the following link.
+Firstly the following labels have been selected:
+• "Gothic fiction",
+• "Spy fiction",
+• "Detective fiction",
+• "Historical fiction",
+• "Crime Fiction",
+• "Science Fiction",
+• "Speculative fiction",
+• "Fiction"
+The occurence rate of each label differs. The labels
+are in ascending order with "Fiction" being the most
+common one and "Gothic Fiction" being the least
+common one.
+A new dataset is constructed from the original
+dataset. The JSON label column is parsed into a
+more suitable one-hot encoded vector. If a label is
+present for a given book - it is encoded as 1 at the
+corresponding index in this one-hot encoded vector.
+If a label is not present for a given book - it is encoded
+as a 0 at the corresponding index. Such an encoding
+for a book with labels "Spy fiction", "Detective fiction"
+and "Fiction" is:
+• "[0, 1, 1, 0, 0, 0, 0, 1]"
+Also an "is-fiction" column is added to this new
+dataset which contains 1 if for any book - any of the
+selected labels are present.
+This is the first dataset that has been constructed.
+One big problem of this dataset is that it is highly
+unbalanced with some labels occuring far more often
+than others. Training a model with this dataset intro-
+duces an obvious bias towards classes that are more
+frequently represented in the dataset. This "faulty"
+dataset can be found at the following link.
+Creating a dataset - attempt 2
+To address these issues - a second "balanced" dataset
+has been constructed. The balanced dataset has
+4000 entries of each kind - Fiction and Non-Fiction.
+Whether an entry in the datset is fiction or not is
+encoded with the "is-fiction" column. Also the one-
+hot encoding of the different fiction labels has been
+excluded from this balanced dataset.
+Finally a big issue we faced was that the LSTM
+layer of the model returned mostly the same result
+- zero. This was due to the fact that the summaries
+were too long and the signal died down upon pro-
+cessing of more than 200 words. To address this - we
+only included the first 100 words from each summary.
+There are a few outliers with less than 100 words in
+total for the whole summary but they do not com-
+promise the overall performance of the model. This
+dataset was used for the training of the final model.
+The balanced dataset with short summaries can be
+found at the following link.
+The python script used to create the balanced
+dataset can be found at the following link.
+Validation dataset
+A dataset used for validation has been constructed
+from the books not features in the balanced dataset.
+This dataset features short 100 word summaries of
+books not featured in the original balanced dataset.
+In total it has 471 entries and is only used for valida-
+tion.
+The python script used to create the balanced
+dataset can be found at the following link.
+Encoder layer
+The first step of the classification process is defining
+an encoder. A vocabulary consisting of the 10000
+most frequent words is selected. An inner order of
+words is established so each word correspongs to
+some index in this inner order. If a word is not part
+of the vocabulary a special index is selected for this
+word - 1 corresponding to an unknown word ( in the
+selected vocabulary).
+An example of such an encoding:
+1. Unencoded: Ash is an orphan foundling who
+grew up as a camp follower with a group of
+mercenaries.
+2. Encoded: 6791 8 18 1115 1 19 1993 49 15 4 606
+8303 11 4 151 3 4631
+3. Encoded-decoded: ash is an orphan [UNK] who
+grew up as a camp follower with a group of
+mercenaries
+Model architecture
+The architecture of the final model is a sequential neu-
+ral network, consisting of a several layers. The model
+is implemented using the Tensorflow framework:
+1. Encoder layer
+2. Embedding layer - trainable embedding layer
+with output dimension 100.
+3. Bidirectional LSTM layer with 100 internal units.
+We use L2 regularization and L2 recurrent regu-
+larization with parameters 0.01.
+4. Dense layer with 64 neurons, RELU activations
+and L2 regularization with parameter 0.01. We
+4 Journal of Biological Sampling (2024) 12:533-684
+Shortened Running Article Title
+apply dropout after the first dense layer to op-
+timize the models generalization abilities and
+prevent overfitting. Dropout probability is 0.5.
+5. Second dense layer with 32 neurons, RELU ac-
+tivations and L2 regularization with parameter
+0.01. We also apply dropout after this layer with
+dropout probability 0.5.
+6. Final layer with 1 output neuron and RELU acti-
+vation.
+Training the model
+During all of the training attempts we used the
+ADAM optimizer. We experimented with multiple
+loss function:
+• MSE - Mean squared error proved quite unfruit-
+ful because the required results are small num-
+bers, most often in the range from 0 to 1. We
+quickly opted for other loss function as MSE is
+more usefull in regression tasks and we are faced
+with a classification task.
+• Binary Cross Entropy Loss - This loss proved
+usefull in the training of out model. It produced
+good results and this is what the final model has
+been trained with.
+The most useful metric used during training
+proved to be binary accuracy. Our model produces
+a number, most often in range from 0 to 1. Binary
+accuracy takes the result from the model and inter-
+prets the result as 1 if the model output is higher
+than some threshold, otherwise interpets result as 0.
+We found that the best results are achieved with a
+threshhold of 0.6.
+The model has been trained for around 30 epochs
+with learning rate being decreased 10 times after each
+10 epochs.
+The final training loss is around 0.2134 and the
+binary precision is around 95 percent on training
+data and 90 percent on validation data.
+The trained model can be downloaded from the
+following link.
+Failed attempts and architectures
+We tried to create a model with several architectures
+and datasets. Not all attempts produced good re-
+sults. The following is a run-down of some of the
+unsuccessful attempts to train a good model:
+• Sigmoid activation function - using sigmoid acti-
+vation function made quite a lot of sense in the
+beginning but proved unfruitfull. The results
+produced by the sigmoid activation function
+were far worse than those when using RELU.
+• Using full summaries - Initially we tried pass-
+ing full summaries through the LSTM layer, but
+we encountered a serious problem with that ap-
+proach. When passing longer texts through the
+LSTM layer we found out that the signal died
+down and the LSTM layer always returned 0.
+This unwanted behaviour could possibly be re-
+moved with training the model with more data.
+However, being limited by dataset size, we opted
+to reduce the summary length and include only
+the first 100 words from each summary.
+• Multilabel classification - Multilabel classifica-
+tion with the given dataset proved harder that
+expected. The biggest problem we encountered
+was that highly represented labels(classes) had
+on average a higher output value that less rep-
+resented ones. This could be solved by balanc-
+ing the dataset, employing techniques of data
+augmentation. One such technique could be
+splitting each summary into 100 long word sum-
+maries and including only as much summaries
+from each desired class as for the dataset to be
+balanced.
+• Using standart recurrent layer (RNN layer) - We
+found that a standart recurrent layer failed to
+generalize the 100 word summaries and opted
+to use an LSTM layer instead. Even for relatively
+short 100 word summaries - the normal RNN
+layer failed to give plausible results.
