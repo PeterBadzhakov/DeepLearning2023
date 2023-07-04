@@ -152,14 +152,14 @@ non_fiction_df = df_balanced[df_balanced["is-fiction"] == 0].head(classMemberCou
 
 df_balanced = pd.concat([fiction_df, non_fiction_df], ignore_index=True)
 
-# Keep only the first summaryLen words from the "summary" column
-df_balanced["Summary-short"] = df_balanced["Summary"].str.split().str[:summaryLen].str.join(" ")
-df_balanced.drop("Summary", axis=1, inplace=True)
+# Split each summary into 100-word blocks and add each block as a separate entry in the DataFrame
+df_balanced_expanded = pd.DataFrame(columns=["Summary-short", "is-fiction"])
+for index, row in df_balanced.iterrows():
+    summary_words = row["Summary"].split()
+    for i in range(0, len(summary_words), summaryLen):
+        block = " ".join(summary_words[i:i+summaryLen])
+        df_balanced_expanded = df_balanced_expanded.append({"Summary-short": block, "is-fiction": row["is-fiction"]}, ignore_index=True)
 
-show_dataset_summary(df_balanced, "df_balanced", 200, 'Summary-short')
+show_dataset_summary(df_balanced_expanded, "df_balanced_expanded", 200, 'Summary-short')
 
-
-
-# %%
-df_balanced.to_csv("dataset_is-fiction_summary_balanced.csv")
-# %%
+df_balanced_expanded.to_csv("dataset_is-fiction_summary_balanced.csv")
